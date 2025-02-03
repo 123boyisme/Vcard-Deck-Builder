@@ -210,10 +210,75 @@
       background-color: #007bff;
       color: white;
     }
+    .dark-mode {
+      background-color: #1e1e1e;
+      color: #fff;
+    }
+
+    .dark-mode .tab-container,
+    .dark-mode .element-filters,
+    .dark-mode .current-deck {
+      background-color: #2a2a2a;
+      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+    }
+
+    .dark-mode .tab,
+    .dark-mode .filter-button {
+      background-color: #444;
+      color: white;
+    }
+
+    .dark-mode .tab:hover,
+    .dark-mode .filter-button:hover {
+      background-color: #555;
+    }
+
+    .dark-mode .tab.active {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .dark-mode .card {
+      background-color: #333;
+      box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+    }
+
+    .dark-mode .deck-list li {
+      background-color: #444;
+      border-color: #666;
+    }
+
+    .dark-mode .remove-button {
+      background-color: #ff4d4d;
+    }
+
+    .dark-mode .remove-button:hover {
+      background-color: #ff1a1a;
+    }
+
+    .dark-mode-toggle {
+      padding: 10px 15px;
+      cursor: pointer;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .dark-mode-toggle:hover {
+      background-color: #0056b3;
+    }
+    .dark-mode .filter-button.active {
+      background-color: #007bff;
+      color: white;
+  }
+
+
   </style>
 </head>
 <body>
-
   <div class="header">
     <div class="tab-container">
       <button class="tab active" onclick="showTab('all', event)">All</button>
@@ -223,6 +288,7 @@
       <button class="tab" onclick="showTab('ultra-rares', event)">Ultra Rares</button>
       <button class="tab" onclick="showTab('supports', event)">Supports</button>
     </div>
+    <button id="dark-mode-toggle">Toggle Dark Mode</button>
   </div>
 
   <div class="element-filters">
@@ -254,7 +320,7 @@
     const cards = [
         { id: 1, name: "B", category: "mascots", element: "Electric", image: "Vcards/mascots/B.jpeg" },
         { id: 2, name: "Baby Moth", category: "mascots", element: "Electric", image: "Vcards/mascots/Baby Moth.jpeg" },
-        { id: 3, name: "Bastard Cat", category: "mascots", element: "Grass", image: "Vcards/mascots/Bastard Cat.jpeg" },
+        { id: 3, name: "Batsard Cat", category: "mascots", element: "Grass", image: "Vcards/mascots/Bastard Cat.jpeg" },
         { id: 4, name: "Benson", category: "mascots", element: "Fire", image: "Vcards/mascots/Benson.jpeg" },
         { id: 5, name: "Bradley", category: "mascots", element: "Fire", image: "Vcards/mascots/Bradley.jpeg" },
         { id: 6, name: "Bro", category: "mascots", element: "Water", image: "Vcards/mascots/Bro.jpeg" },
@@ -298,22 +364,22 @@
         { id: 43, name: "Monarch 8", category: "uncommons", element: "Water", image: "Vcards/uncommons/AmeLee-01.jpeg" },
         { id: 44, name: "Bao the Whale", category: "uncommons", element: "Water", image: "Vcards/uncommons/Bao-01.jpeg" },
         { id: 45, name: "Buffpup", category: "uncommons", element: "Grass", image: "Vcards/uncommons/Buffpup-01.jpeg" },
-        { id: 46, name: "Camila", category: "uncommons", element: "Electric", image: "Vcards/uncommons/Camila-01.jpeg" },
+        { id: 46, name: "Camila", category: "uncommons", element: "Platinum", image: "Vcards/uncommons/Camila-01.jpeg" },
         { id: 47, name: "CodeMiko", category: "uncommons", element: "Electric", image: "Vcards/uncommons/CodeMiko-01.jpeg" },
         { id: 48, name: "Coqui", category: "uncommons", element: "Grass", image: "Vcards/uncommons/Coqui-01.png" },
         { id: 49, name: "Cottontailva", category: "uncommons", element: "Electric", image: "Vcards/uncommons/Cottontail-01.jpeg" },
         { id: 50, name: "CyYu", category: "uncommons", element: "Electric", image: "Vcards/uncommons/CyYu-01.jpeg" },
         { id: 51, name: "Doki", category: "uncommons", element: "Grass", image: "Vcards/uncommons/Doki-01.jpeg" },
-        { id: 52, name: "Dya Rikku", category: "uncommons", element: "Electric", image: "Vcards/uncommons/Dya-Rikku-01.jpeg" },
+        { id: 52, name: "Dya Rikku", category: "uncommons", element: "Platinum", image: "Vcards/uncommons/Dya-Rikku-01.jpeg" },
         { id: 53, name: "Ebiko", category: "uncommons", element: "Water", image: "Vcards/uncommons/Ebiko-01.jpeg" },
         { id: 54, name: "Fefe", category: "uncommons", element: "Fire", image: "Vcards/uncommons/Fefe-01.jpeg" },
         { id: 55, name: "FoxyReine", category: "uncommons", element: "Water", image: "Vcards/uncommons/FoxyReine-01.jpeg" },
         { id: 56, name: "FroggyLoch", category: "uncommons", element: "Water", image: "Vcards/uncommons/FroggyLoch-01.jpeg" },
-        { id: 57, name: "Fream", category: "uncommons", element: "Electric", image: "Vcards/uncommons/Fream-01.jpeg" },
-        { id: 58, name: "Heavenly Father", category: "uncommons", element: "Electric", image: "Vcards/uncommons/Heavenly-Father-01.jpeg" },
+        { id: 57, name: "Fream", category: "uncommons", element: "Platinum", image: "Vcards/uncommons/Fream-01.jpeg" },
+        { id: 58, name: "Heavenly Father", category: "uncommons", element: "Platinum", image: "Vcards/uncommons/Heavenly-Father-01.jpeg" },
         { id: 59, name: "Juniper Actias", category: "uncommons", element: "Electric", image: "Vcards/uncommons/Juniper-Actias-01.jpeg" },
         { id: 60, name: "Laimu", category: "uncommons", element: "Grass", image: "Vcards/uncommons/Laimu-01.jpeg" },
-        { id: 61, name: "Layna Lazar", category: "uncommons", element: "Electric", image: "Vcards/uncommons/Layna-Lazar-01.jpeg" },
+        { id: 61, name: "Layna Lazar", category: "uncommons", element: "Platinum", image: "Vcards/uncommons/Layna-Lazar-01.jpeg" },
         { id: 62, name: "Lord Aethelstan", category: "uncommons", element: "Fire", image: "Vcards/uncommons/Lord-Aethel-01.jpeg" },
         { id: 63, name: "Lucy Pyre", category: "uncommons", element: "Electric", image: "Vcards/uncommons/Lucy-Pyre-01.jpeg" },
         { id: 64, name: "Meat",category: "uncommons", element: "Grass", image: "Vcards/uncommons/Meat-01.jpeg"},
@@ -324,16 +390,16 @@
         { id: 69, name: "Punkalopi", category: "uncommons", element: "Fire", image: "Vcards/uncommons/Punkalopi-01.jpeg" },
         { id: 70, name: "Quinn Benet", category: "uncommons", element: "Electric", image: "Vcards/uncommons/Quinn-Benet-01.jpeg" },
         { id: 72, name: "Rainhoe", category: "uncommons", element: "Electric", image: "Vcards/uncommons/Rainhoe-01.jpeg" },
-        { id: 73, name: "Sansin", category: "uncommons", element: "Electric", image: "Vcards/uncommons/Sansin-01.jpeg" },      
+        { id: 73, name: "Sansin", category: "uncommons", element: "Platinum", image: "Vcards/uncommons/Sansin-01.jpeg" },      
         { id: 74, name: "Shoto", category: "uncommons", element: "Electric", image: "Vcards/uncommons/Shoto-01.jpeg" },
         { id: 75, name: "Shylily", category: "uncommons", element: "Water", image: "Vcards/uncommons/Shylily-01.jpeg" },
         { id: 76, name: "Silvervale", category: "uncommons", element: "Grass", image: "Vcards/uncommons/Silvervale-01.jpeg" },
         { id: 77, name: "Sinder", category: "uncommons", element: "Fire", image: "Vcards/uncommons/Sinder-01.jpeg" },
         { id: 78, name: "Sky", category: "uncommons", element: "Electric", image: "Vcards/uncommons/Sky-01.jpeg" },
         { id: 79, name: "Tob", category: "uncommons", element: "Grass", image: "Vcards/uncommons/Tob-01.jpeg" },
-        { id: 80, name: "Totless", category: "uncommons", element: "Electric", image: "Vcards/uncommons/Totless-01.jpeg" },
+        { id: 80, name: "Totless", category: "uncommons", element: "Platinum", image: "Vcards/uncommons/Totless-01.jpeg" },
         { id: 81, name: "Pirate Trickywi", category: "uncommons", element: "Fire", image: "Vcards/uncommons/Trickywi-01.jpeg" },
-        { id: 82, name: "Vei", category: "uncommons", element: "Electric", image: "Vcards/uncommons/Vei-01.jpeg" },
+        { id: 82, name: "Vei", category: "uncommons", element: "Platinum", image: "Vcards/uncommons/Vei-01.jpeg" },
         { id: 83, name: "Farmer Vienna", category: "uncommons", element: "Grass", image: "Vcards/uncommons/Vienna-01.jpeg" },
         { id: 84, name: "Akumi", category: "uncommons", element: "Fire", image: "Vcards/uncommons/Yoclesh-01.jpeg" },
         { id: 85, name: "Yuzu", category: "uncommons", element: "Fire", image: "Vcards/uncommons/Yuzu-01.jpeg" },
@@ -341,22 +407,22 @@
         { id: 86, name: "Monarch", category: "rares", element: "Water", image: "Vcards/rares/AmeLee-02.jpeg" },
         { id: 87, name: "Bao the Whale", category: "rares", element: "Water", image: "Vcards/rares/Bao-02.jpeg" },
         { id: 88, name: "Buffpup", category: "rares", element: "Grass", image: "Vcards/rares/Buffpup-02.jpeg" },
-        { id: 89, name: "Camila", category: "rares", element: "Electric", image: "Vcards/rares/Camila-02.jpeg" },
+        { id: 89, name: "Camila", category: "rares", element: "Platinum", image: "Vcards/rares/Camila-02.jpeg" },
         { id: 90, name: "CodeMiko", category: "rares", element: "Electric", image: "Vcards/rares/CodeMiko-02.jpeg" },
         { id: 91, name: "Coqui", category: "rares", element: "Grass", image: "Vcards/rares/Coqui-02.png" },
         { id: 92, name: "Cottontailva", category: "rares", element: "Electric", image: "Vcards/rares/Cottontail-02.jpeg" },
         { id: 93, name: "CyYu", category: "rares", element: "Electric", image: "Vcards/rares/CyYu-02.jpeg" },
         { id: 94, name: "Doki", category: "rares", element: "Grass", image: "Vcards/rares/Doki-02.jpeg" },
-        { id: 95, name: "Dya Rikku", category: "rares", element: "Electric", image: "Vcards/rares/Dya-Rikku-02.jpeg" },
+        { id: 95, name: "Dya Rikku", category: "rares", element: "Platinum", image: "Vcards/rares/Dya-Rikku-02.jpeg" },
         { id: 96, name: "Ebiko", category: "rares", element: "Water", image: "Vcards/rares/Ebiko-02.jpeg" },
         { id: 97, name: "Fefe", category: "rares", element: "Fire", image: "Vcards/rares/Fefe-02.jpeg" },
         { id: 98, name: "FoxyReine", category: "rares", element: "Water", image: "Vcards/rares/FoxyReine-02.jpeg" },
         { id: 99, name: "FroggyLoch", category: "rares", element: "Water", image: "Vcards/rares/FroggyLoch-02.jpeg" },
-        { id: 100, name: "Fream", category: "rares", element: "Electric", image: "Vcards/rares/Fream-02.jpeg" },
-        { id: 101, name: "Heavenly Father", category: "rares", element: "Electric", image: "Vcards/rares/Heavenly-Father-02.jpeg" },
+        { id: 100, name: "Fream", category: "rares", element: "Platinum", image: "Vcards/rares/Fream-02.jpeg" },
+        { id: 101, name: "Heavenly Father", category: "rares", element: "Platinum", image: "Vcards/rares/Heavenly-Father-02.jpeg" },
         { id: 102, name: "Juniper Actias", category: "rares", element: "Electric", image: "Vcards/rares/Juniper-Actias-02.jpeg" },
         { id: 103, name: "Laimu", category: "rares", element: "Grass", image: "Vcards/rares/Laimu-02.jpeg" },
-        { id: 104, name: "Layna Lazar", category: "rares", element: "Electric", image: "Vcards/rares/Layna-Lazar-02.jpeg" },
+        { id: 104, name: "Layna Lazar", category: "rares", element: "Platinum", image: "Vcards/rares/Layna-Lazar-02.jpeg" },
         { id: 105, name: "Lord Aethelstan", category: "rares", element: "Fire", image: "Vcards/rares/Lord-Aethel-02.jpeg" },
         { id: 106, name: "Lucy Pyre", category: "rares", element: "Electric", image: "Vcards/rares/Lucy-Pyre-02.jpeg" },
         { id: 107, name: "Meat",category: "rares", element: "Grass", image: "Vcards/rares/Meat-02.jpeg"},
@@ -367,16 +433,16 @@
         { id: 112, name: "Punkalopi", category: "rares", element: "Fire", image: "Vcards/rares/Punkalopi-02.jpeg" },
         { id: 113, name: "Quinn Benet", category: "rares", element: "Electric", image: "Vcards/rares/Quinn-Benet-02.jpeg" },
         { id: 114, name: "Rainhoe", category: "rares", element: "Electric", image: "Vcards/rares/Rainhoe-02.jpeg" },
-        { id: 115, name: "Sansin", category: "rares", element: "Electric", image: "Vcards/rares/Sansin-02.jpeg" },      
+        { id: 115, name: "Sansin", category: "rares", element: "Platinum", image: "Vcards/rares/Sansin-02.jpeg" },      
         { id: 116, name: "Shoto", category: "rares", element: "Electric", image: "Vcards/rares/Shoto-02.jpeg" },
         { id: 117, name: "Shylily", category: "rares", element: "Water", image: "Vcards/rares/Shylily-02.jpeg" },
         { id: 118, name: "Silvervale", category: "rares", element: "Grass", image: "Vcards/rares/Silvervale-02.jpeg" },
         { id: 119, name: "Sinder", category: "rares", element: "Fire", image: "Vcards/rares/Sinder-02.jpeg" },
         { id: 120, name: "Sky", category: "rares", element: "Electric", image: "Vcards/rares/Sky-02.jpeg" },
         { id: 121, name: "Tob", category: "rares", element: "Grass", image: "Vcards/rares/Tob-02.jpeg" },
-        { id: 122, name: "Totless", category: "rares", element: "Electric", image: "Vcards/rares/Totless-02.jpeg" },
+        { id: 122, name: "Totless", category: "rares", element: "Platinum", image: "Vcards/rares/Totless-02.jpeg" },
         { id: 123, name: "Pirate Trickywi", category: "rares", element: "Fire", image: "Vcards/rares/Trickywi-02.jpeg" },
-        { id: 124, name: "Vei", category: "rares", element: "Electric", image: "Vcards/rares/Vei-02.jpeg" },
+        { id: 124, name: "Vei", category: "rares", element: "Platinum", image: "Vcards/rares/Vei-02.jpeg" },
         { id: 125, name: "Farmer Vienna", category: "rares", element: "Grass", image: "Vcards/rares/Vienna-02.jpeg" },
         { id: 126, name: "Akumi", category: "rares", element: "Fire", image: "Vcards/rares/Yoclesh-02.jpeg" },
         { id: 127, name: "Yuzu", category: "rares", element: "Fire", image: "Vcards/rares/Yuzu-02.jpeg" },
@@ -384,22 +450,22 @@
         { id: 128, name: "Monarch", category: "ultra-rares", element: "Water", image: "Vcards/ultra rares/AmeLee-03.jpeg" },
         { id: 129, name: "Bao the Whale", category: "ultra-rares", element: "Water", image: "Vcards/ultra rares/Bao-03.jpeg" },
         { id: 130, name: "Buffpup", category: "ultra-rares", element: "Grass", image: "Vcards/ultra rares/Buffpup-03.jpeg" },
-        { id: 131, name: "Camila", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/Camila-03.jpeg" },
+        { id: 131, name: "Camila", category: "ultra-rares", element: "Platinum", image: "Vcards/ultra rares/Camila-03.jpeg" },
         { id: 132, name: "CodeMiko", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/CodeMiko-03.jpeg" },
         { id: 133, name: "Coqui", category: "ultra-rares", element: "Grass", image: "Vcards/ultra rares/Coqui-03.png" },
         { id: 134, name: "Cottontailva", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/Cottontail-03.jpeg" },
         { id: 135, name: "CyYu", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/CyYu-03.jpeg" },
         { id: 136, name: "Doki", category: "ultra-rares", element: "Grass", image: "Vcards/ultra rares/Doki-03.jpeg" },
-        { id: 137, name: "Dya Rikku", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/Dya-Rikku-03.jpeg" },
+        { id: 137, name: "Dya Rikku", category: "ultra-rares", element: "Platinum", image: "Vcards/ultra rares/Dya-Rikku-03.jpeg" },
         { id: 138, name: "Ebiko", category: "ultra-rares", element: "Water", image: "Vcards/ultra rares/Ebiko-03.jpeg" },
         { id: 139, name: "Fefe", category: "ultra-rares", element: "Fire", image: "Vcards/ultra rares/Fefe-03.jpeg" },
         { id: 140, name: "FoxyReine", category: "ultra-rares", element: "Water", image: "Vcards/ultra rares/FoxyReine-03.jpeg" },
         { id: 141, name: "FroggyLoch", category: "ultra-rares", element: "Water", image: "Vcards/ultra rares/FroggyLoch-03.jpeg" },
-        { id: 142, name: "Fream", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/Fream-03.jpeg" },
-        { id: 143, name: "Heavenly Father", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/Heavenly-Father-03.jpeg" },
+        { id: 142, name: "Fream", category: "ultra-rares", element: "Platinum", image: "Vcards/ultra rares/Fream-03.jpeg" },
+        { id: 143, name: "Heavenly Father", category: "ultra-rares", element: "Platinum", image: "Vcards/ultra rares/Heavenly-Father-03.jpeg" },
         { id: 144, name: "Juniper Actias", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/Juniper-Actias-03.jpeg" },
         { id: 145, name: "Laimu", category: "ultra-rares", element: "Grass", image: "Vcards/ultra rares/Laimu-03.jpeg" },
-        { id: 146, name: "Layna Lazar", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/Layna-Lazar-03.jpeg" },
+        { id: 146, name: "Layna Lazar", category: "ultra-rares", element: "Platinum", image: "Vcards/ultra rares/Layna-Lazar-03.jpeg" },
         { id: 147, name: "Lord Aethelstan", category: "ultra-rares", element: "Fire", image: "Vcards/ultra rares/Lord-Aethel-03.jpeg" },
         { id: 148, name: "Lucy Pyre", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/Lucy-Pyre-03.jpeg" },
         { id: 149, name: "Meat",category: "ultra-rares", element: "Grass", image: "Vcards/ultra rares/Meat-03.jpeg"},
@@ -410,21 +476,20 @@
         { id: 154, name: "Punkalopi", category: "ultra-rares", element: "Fire", image: "Vcards/ultra rares/Punkalopi-03.jpeg" },
         { id: 155, name: "Quinn Benet", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/Quinn-Benet-03.jpeg" },
         { id: 156, name: "Rainhoe", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/Rainhoe-03.jpeg" },
-        { id: 157, name: "Sansin", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/Sansin-03.jpeg" },      
+        { id: 157, name: "Sansin", category: "ultra-rares", element: "Platinum", image: "Vcards/ultra rares/Sansin-03.jpeg" },      
         { id: 158, name: "Shoto", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/Shoto-03.jpeg" },
         { id: 159, name: "Shylily", category: "ultra-rares", element: "Water", image: "Vcards/ultra rares/Shylily-03.jpeg" },
         { id: 160, name: "Silvervale", category: "ultra-rares", element: "Grass", image: "Vcards/ultra rares/Silvervale-03.jpeg" },
         { id: 161, name: "Sinder", category: "ultra-rares", element: "Fire", image: "Vcards/ultra rares/Sinder-03.jpeg" },
         { id: 162, name: "Sky", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/Sky-03.jpeg" },
         { id: 163, name: "Tob", category: "ultra-rares", element: "Grass", image: "Vcards/ultra rares/Tob-03.jpeg" },
-        { id: 164, name: "Totless", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/Totless-03.jpeg" },
+        { id: 164, name: "Totless", category: "ultra-rares", element: "Platinum", image: "Vcards/ultra rares/Totless-03.jpeg" },
         { id: 165, name: "Pirate Trickywi", category: "ultra-rares", element: "Fire", image: "Vcards/ultra rares/Trickywi-03.jpeg" },
-        { id: 166, name: "Vei", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/Vei-03.jpeg" },
+        { id: 166, name: "Vei", category: "ultra-rares", element: "Platinum", image: "Vcards/ultra rares/Vei-03.jpeg" },
         { id: 167, name: "Farmer Vienna", category: "ultra-rares", element: "Grass", image: "Vcards/ultra rares/Vienna-03.jpeg" },
         { id: 168, name: "Akumi", category: "ultra-rares", element: "Fire", image: "Vcards/ultra rares/Yoclesh-03.jpeg" },
         { id: 169, name: "Yuzu", category: "ultra-rares", element: "Fire", image: "Vcards/ultra rares/Yuzu-03.jpeg" },
         //support
-        
         { id: 170, name: "Battle Cry", category: "supports", image: "Vcards/supports/Battle Cry.jpeg" },
         { id: 171, name: "Butcher's Blade", category: "supports", image: "Vcards/supports/Butcher's Blade.jpeg" },
         { id: 172, name: "Cyanide-chan", category: "supports", image: "Vcards/supports/Cyanide-chan.jpeg" },
@@ -435,7 +500,6 @@
         { id: 177, name: "Exposed", category: "supports", image: "Vcards/supports/Exposed.jpeg" },
         { id: 178, name: "Fire Guardian", category: "supports", image: "Vcards/supports/Fire Guardian.jpeg" },
         { id: 179, name: "Fire Shield", category: "supports", image: "Vcards/supports/Fire Shield.jpeg" },
-
         { id: 180, name: "Grass Guardian", category: "supports", image: "Vcards/supports/Grass Guardian.jpeg" },
         { id: 181, name: "Grass Shield", category: "supports", image: "Vcards/supports/Grass Shield.jpeg" },
         { id: 182, name: "Happiness-chan", category: "supports", image: "Vcards/supports/Happiness-chan.jpeg" },
@@ -591,6 +655,30 @@
     }
 
     renderCards();
+
+    const toggleButton = document.getElementById("dark-mode-toggle");
+
+    toggleButton.addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
+
+      // Save the user's preference in localStorage
+      if (document.body.classList.contains("dark-mode")) {
+        localStorage.setItem("theme", "dark");
+      } else {
+        localStorage.setItem("theme", "light");
+      }
+    });
+
+    window.addEventListener("DOMContentLoaded", () => {
+      if (localStorage.getItem("theme") === "light") {
+        document.body.classList.remove("dark-mode");
+      } else {
+        document.body.classList.add("dark-mode"); // Default to dark mode
+        localStorage.setItem("theme", "dark");
+      }
+    });
+
+
   </script>
 </body>
 </html>
