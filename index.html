@@ -1,12 +1,596 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deck Builder</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deck Builder</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f4f4f4;
+    }
+
+    .header {
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .tab-container {
+      display: flex;
+      gap: 10px;
+      background-color: white;
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      border: none;
+      background-color: #e0e0e0;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .tab:hover {
+      background-color: #d0d0d0;
+    }
+
+    .tab.active {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .content-wrapper {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .filters-and-cards {
+      display: flex;
+      flex-direction: column;
+      width: 75%;
+    }
+
+    .search-bar {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 8px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      outline: none;
+    }
+
+    .cards-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .card {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      width: 180px;
+      text-align: center;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .card img {
+      width: 100%;
+      height: auto;
+      border-radius: 5px;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .current-deck {
+      width: 20%;
+      background-color: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .current-deck h2 {
+      margin-top: 0;
+    }
+
+    .category-header {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .deck-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .deck-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 5px;
+      background-color: #f9f9f9;
+    }
+
+    .remove-button {
+      background-color: #ff4d4d;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+      font-size: 12px;
+      margin-left: 10px;
+    }
+
+    .remove-button:hover {
+      background-color: #ff1a1a;
+    }
+
+    .clear-button,
+    .download-button {
+      background-color: #ff4d4d;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .download-button {
+      background-color: #28a745;
+    }
+
+    .clear-button:hover {
+      background-color: #ff1a1a;
+    }
+
+    .download-button:hover {
+      background-color: #218838;
+    }
+
+    .tracker {
+      text-align: center;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    .element-filters {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 15px 0;
+      background-color: white;
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .filter-button {
+      padding: 10px 20px;
+      cursor: pointer;
+      border: none;
+      background-color: #e0e0e0;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .filter-button:hover {
+      background-color: #d0d0d0;
+    }
+
+    .filter-button.active {
+      background-color: #007bff;
+      color: white;
+    }
+  </style>
 </head>
 <body>
-    <h1>Welcome to the Deck Builder</h1>
-    <p>This is the starting point for your online deck-building tool.</p>
+
+  <div class="header">
+    <div class="tab-container">
+      <button class="tab active" onclick="showTab('all', event)">All</button>
+      <button class="tab" onclick="showTab('mascots', event)">Mascots</button>
+      <button class="tab" onclick="showTab('uncommons', event)">Uncommons</button>
+      <button class="tab" onclick="showTab('rares', event)">Rares</button>
+      <button class="tab" onclick="showTab('ultra-rares', event)">Ultra Rares</button>
+      <button class="tab" onclick="showTab('supports', event)">Supports</button>
+    </div>
+  </div>
+
+  <div class="element-filters">
+    <button class="filter-button" onclick="filterByElement('all', event)">All</button>
+    <button class="filter-button" onclick="filterByElement('Fire', event)">Fire</button>
+    <button class="filter-button" onclick="filterByElement('Water', event)">Water</button>
+    <button class="filter-button" onclick="filterByElement('Platinum', event)">Platinum</button>
+    <button class="filter-button" onclick="filterByElement('Grass', event)">Grass</button>
+    <button class="filter-button" onclick="filterByElement('Electric', event)">Electric</button>
+  </div>
+
+  <div class="content-wrapper">
+    <div class="filters-and-cards">
+      <div class="search-bar">
+        <input type="text" id="search-input" class="search-input" placeholder="Search by name..." oninput="filterByName(this.value)">
+      </div>
+      <div class="cards-container" id="tab-content"></div>
+    </div>
+    <div class="current-deck">
+      <h2>Current Deck</h2>
+      <div id="deck-container"></div>
+      <div class="tracker">Total Cards: <span id="deck-count">0</span></div>
+      <button class="clear-button" onclick="clearDeck()">Clear All</button>
+      <button class="download-button" onclick="downloadDeck()">Download Deck</button>
+    </div>
+  </div>
+
+  <script>
+    const cards = [
+        { id: 1, name: "B", category: "mascots", element: "Electric", image: "Vcards/mascots/B.jpeg" },
+        { id: 2, name: "Baby Moth", category: "mascots", element: "Electric", image: "Vcards/mascots/Baby Moth.jpeg" },
+        { id: 3, name: "Bastard Cat", category: "mascots", element: "Grass", image: "Vcards/mascots/Bastard Cat.jpeg" },
+        { id: 4, name: "Benson", category: "mascots", element: "Fire", image: "Vcards/mascots/Benson.jpeg" },
+        { id: 5, name: "Bradley", category: "mascots", element: "Fire", image: "Vcards/mascots/Bradley.jpeg" },
+        { id: 6, name: "Bro", category: "mascots", element: "Water", image: "Vcards/mascots/Bro.jpeg" },
+        { id: 7, name: "Chabbit", category: "mascots", element: "Fire", image: "Vcards/mascots/Chabbit.jpeg" },
+        { id: 8, name: "Chatblin", category: "mascots", element: "Platinum", image: "Vcards/mascots/Chatblin.jpeg" },
+        { id: 9, name: "Chibi Layna", category: "mascots", element: "Platinum", image: "Vcards/mascots/Chibi Layna.jpeg" },
+        { id: 10, name: "Cimp", category: "mascots", element: "Platinum", image: "Vcards/mascots/Cimp.jpeg" },
+        { id: 11, name: "Demonite", category: "mascots", element: "Electric", image: "Vcards/mascots/Demonite.jpeg" },
+        { id: 12, name: "Dragoons", category: "mascots", element: "Grass", image: "Vcards/mascots/Dragoons.jpeg" },
+        { id: 13, name: "Droid", category: "mascots", element: "Electric", image: "Vcards/mascots/Droid.jpeg" },
+        { id: 14, name: "Electrobytes", category: "mascots", element: "Electric", image: "Vcards/mascots/Electrobytes.jpeg" },
+        { id: 15, name: "Evilbot", category: "mascots", element: "Platinum", image: "Vcards/mascots/Evilbot.jpeg" },
+        { id: 16, name: "Farmer Cosmate", category: "mascots", element: "Grass", image: "Vcards/mascots/Farmer Cosmate.jpeg" },
+        { id: 17, name: "Fluffer", category: "mascots", element: "Electric", image: "Vcards/mascots/Fluffer.jpeg" },
+        { id: 18, name: "Froglodyte", category: "mascots", element: "Water", image: "Vcards/mascots/Froglodyte.jpeg" },
+        { id: 19, name: "Goro", category: "mascots", element: "Water", image: "Vcards/mascots/Goro.jpeg" },
+        { id: 20, name: "Guildie", category: "mascots", element: "Electric", image: "Vcards/mascots/Guildie.jpeg" },
+        { id: 21, name: "Gwub", category: "mascots", element: "Water", image: "Vcards/mascots/Gwub.jpeg" },
+        { id: 22, name: "Haze", category: "mascots", element: "Electric", image: "Vcards/mascots/Haze.jpeg" },
+        { id: 23, name: "Lampchamp", category: "mascots", element: "Fire", image: "Vcards/mascots/Lampchamp.jpeg" },
+        { id: 24, name: "Limon", category: "mascots", element: "Grass", image: "Vcards/mascots/Limon.jpeg" },
+        { id: 25, name: "Meathead", category: "mascots", element: "Grass", image: "Vcards/mascots/Meathead.jpeg" },
+        { id: 26, name: "Mimi", category: "mascots", element: "Platinum", image: "Vcards/mascots/Mimi.jpeg" },
+        { id: 27, name: "Monarch Messenger Clone", category: "mascots", element: "Water", image: "Vcards/mascots/Monarch Messenger Clone.jpeg" },
+        { id: 28, name: "Nanomono", category: "mascots", element: "Platinum", image: "Vcards/mascots/Nanomono.jpeg" },
+        { id: 29, name: "Ollie", category: "mascots", element: "Platinum", image: "Vcards/mascots/Ollie.jpeg" },
+        { id: 30, name: "Orca Pup", category: "mascots", element: "Water", image: "Vcards/mascots/Orca Pup.jpeg" },
+        { id: 31, name: "Petal Pals", category: "mascots", element: "Grass", image: "Vcards/mascots/Petal Pals.jpeg" },
+        { id: 32, name: "Pestonini", category: "mascots", element: "Water", image: "Vcards/mascots/Pestonini.jpeg" },
+        { id: 33, name: "Potat", category: "mascots", element: "Electric", image: "Vcards/mascots/Potat.jpeg" },
+        { id: 34, name: "Pup", category: "mascots", element: "Grass", image: "Vcards/mascots/Pup.jpeg" },
+        { id: 35, name: "Pyro Pup", category: "mascots", element: "Fire", image: "Vcards/mascots/Pyro Pup.jpeg" },
+        { id: 36, name: "Rancid", category: "mascots", element: "Fire", image: "Vcards/mascots/Rancid.jpeg" },
+        { id: 37, name: "Sashimi", category: "mascots", element: "Water", image: "Vcards/mascots/Sashimi.jpeg" },
+        { id: 38, name: "Smolcci", category: "mascots", element: "Fire", image: "Vcards/mascots/Smolcci.jpeg" },
+        { id: 39, name: "Spike", category: "mascots", element: "Platinum", image: "Vcards/mascots/Spike.jpeg" },
+        { id: 40, name: "Tad & Cannoli", category: "mascots", element: "Grass", image: "Vcards/mascots/Tad & Cannoli.jpeg" },
+        { id: 41, name: "Tenki", category: "mascots", element: "Platinum", image: "Vcards/mascots/Tenki.jpeg" },
+        { id: 42, name: "Tricky", category: "mascots", element: "Fire", image: "Vcards/mascots/Tricky.jpeg" },
+        //Uncommons
+        { id: 43, name: "Monarch 8", category: "uncommons", element: "Water", image: "Vcards/uncommons/AmeLee-01.jpeg" },
+        { id: 44, name: "Bao the Whale", category: "uncommons", element: "Water", image: "Vcards/uncommons/Bao-01.jpeg" },
+        { id: 45, name: "Buffpup", category: "uncommons", element: "Grass", image: "Vcards/uncommons/Buffpup-01.jpeg" },
+        { id: 46, name: "Camila", category: "uncommons", element: "Electric", image: "Vcards/uncommons/Camila-01.jpeg" },
+        { id: 47, name: "CodeMiko", category: "uncommons", element: "Electric", image: "Vcards/uncommons/CodeMiko-01.jpeg" },
+        { id: 48, name: "Coqui", category: "uncommons", element: "Grass", image: "Vcards/uncommons/Coqui-01.png" },
+        { id: 49, name: "Cottontailva", category: "uncommons", element: "Electric", image: "Vcards/uncommons/Cottontail-01.jpeg" },
+        { id: 50, name: "CyYu", category: "uncommons", element: "Electric", image: "Vcards/uncommons/CyYu-01.jpeg" },
+        { id: 51, name: "Doki", category: "uncommons", element: "Grass", image: "Vcards/uncommons/Doki-01.jpeg" },
+        { id: 52, name: "Dya Rikku", category: "uncommons", element: "Electric", image: "Vcards/uncommons/Dya-Rikku-01.jpeg" },
+        { id: 53, name: "Ebiko", category: "uncommons", element: "Water", image: "Vcards/uncommons/Ebiko-01.jpeg" },
+        { id: 54, name: "Fefe", category: "uncommons", element: "Fire", image: "Vcards/uncommons/Fefe-01.jpeg" },
+        { id: 55, name: "FoxyReine", category: "uncommons", element: "Water", image: "Vcards/uncommons/FoxyReine-01.jpeg" },
+        { id: 56, name: "FroggyLoch", category: "uncommons", element: "Water", image: "Vcards/uncommons/FroggyLoch-01.jpeg" },
+        { id: 57, name: "Fream", category: "uncommons", element: "Electric", image: "Vcards/uncommons/Fream-01.jpeg" },
+        { id: 58, name: "Heavenly Father", category: "uncommons", element: "Electric", image: "Vcards/uncommons/Heavenly-Father-01.jpeg" },
+        { id: 59, name: "Juniper Actias", category: "uncommons", element: "Electric", image: "Vcards/uncommons/Juniper-Actias-01.jpeg" },
+        { id: 60, name: "Laimu", category: "uncommons", element: "Grass", image: "Vcards/uncommons/Laimu-01.jpeg" },
+        { id: 61, name: "Layna Lazar", category: "uncommons", element: "Electric", image: "Vcards/uncommons/Layna-Lazar-01.jpeg" },
+        { id: 62, name: "Lord Aethelstan", category: "uncommons", element: "Fire", image: "Vcards/uncommons/Lord-Aethel-01.jpeg" },
+        { id: 63, name: "Lucy Pyre", category: "uncommons", element: "Electric", image: "Vcards/uncommons/Lucy-Pyre-01.jpeg" },
+        { id: 64, name: "Meat",category: "uncommons", element: "Grass", image: "Vcards/uncommons/Meat-01.jpeg"},
+        { id: 65, name: "MegalodonVT",category: "uncommons", element: "Water", image: "Vcards/uncommons/MegalodonVT-01.jpeg"},
+        { id: 66, name: "Nanoless",category: "uncommons", element: "Platinum", image: "Vcards/uncommons/Nanoless-01.jpeg"},
+        { id: 67, name: "Nyanners", category: "uncommons", element: "Water", image: "Vcards/uncommons/Nayanners-01.png" },
+        { id: 68, name: "University Numi", category: "uncommons", element: "Fire", image: "Vcards/uncommons/Numi-01.jpeg" },
+        { id: 69, name: "Punkalopi", category: "uncommons", element: "Fire", image: "Vcards/uncommons/Punkalopi-01.jpeg" },
+        { id: 70, name: "Quinn Benet", category: "uncommons", element: "Electric", image: "Vcards/uncommons/Quinn-Benet-01.jpeg" },
+        { id: 72, name: "Rainhoe", category: "uncommons", element: "Electric", image: "Vcards/uncommons/Rainhoe-01.jpeg" },
+        { id: 73, name: "Sansin", category: "uncommons", element: "Electric", image: "Vcards/uncommons/Sansin-01.jpeg" },      
+        { id: 74, name: "Shoto", category: "uncommons", element: "Electric", image: "Vcards/uncommons/Shoto-01.jpeg" },
+        { id: 75, name: "Shylily", category: "uncommons", element: "Water", image: "Vcards/uncommons/Shylily-01.jpeg" },
+        { id: 76, name: "Silvervale", category: "uncommons", element: "Grass", image: "Vcards/uncommons/Silvervale-01.jpeg" },
+        { id: 77, name: "Sinder", category: "uncommons", element: "Fire", image: "Vcards/uncommons/Sinder-01.jpeg" },
+        { id: 78, name: "Sky", category: "uncommons", element: "Electric", image: "Vcards/uncommons/Sky-01.jpeg" },
+        { id: 79, name: "Tob", category: "uncommons", element: "Grass", image: "Vcards/uncommons/Tob-01.jpeg" },
+        { id: 80, name: "Totless", category: "uncommons", element: "Electric", image: "Vcards/uncommons/Totless-01.jpeg" },
+        { id: 81, name: "Pirate Trickywi", category: "uncommons", element: "Fire", image: "Vcards/uncommons/Trickywi-01.jpeg" },
+        { id: 82, name: "Vei", category: "uncommons", element: "Electric", image: "Vcards/uncommons/Vei-01.jpeg" },
+        { id: 83, name: "Farmer Vienna", category: "uncommons", element: "Grass", image: "Vcards/uncommons/Vienna-01.jpeg" },
+        { id: 84, name: "Akumi", category: "uncommons", element: "Fire", image: "Vcards/uncommons/Yoclesh-01.jpeg" },
+        { id: 85, name: "Yuzu", category: "uncommons", element: "Fire", image: "Vcards/uncommons/Yuzu-01.jpeg" },
+        //Rares
+        { id: 86, name: "Monarch", category: "rares", element: "Water", image: "Vcards/rares/AmeLee-02.jpeg" },
+        { id: 87, name: "Bao the Whale", category: "rares", element: "Water", image: "Vcards/rares/Bao-02.jpeg" },
+        { id: 88, name: "Buffpup", category: "rares", element: "Grass", image: "Vcards/rares/Buffpup-02.jpeg" },
+        { id: 89, name: "Camila", category: "rares", element: "Electric", image: "Vcards/rares/Camila-02.jpeg" },
+        { id: 90, name: "CodeMiko", category: "rares", element: "Electric", image: "Vcards/rares/CodeMiko-02.jpeg" },
+        { id: 91, name: "Coqui", category: "rares", element: "Grass", image: "Vcards/rares/Coqui-02.png" },
+        { id: 92, name: "Cottontailva", category: "rares", element: "Electric", image: "Vcards/rares/Cottontail-02.jpeg" },
+        { id: 93, name: "CyYu", category: "rares", element: "Electric", image: "Vcards/rares/CyYu-02.jpeg" },
+        { id: 94, name: "Doki", category: "rares", element: "Grass", image: "Vcards/rares/Doki-02.jpeg" },
+        { id: 95, name: "Dya Rikku", category: "rares", element: "Electric", image: "Vcards/rares/Dya-Rikku-02.jpeg" },
+        { id: 96, name: "Ebiko", category: "rares", element: "Water", image: "Vcards/rares/Ebiko-02.jpeg" },
+        { id: 97, name: "Fefe", category: "rares", element: "Fire", image: "Vcards/rares/Fefe-02.jpeg" },
+        { id: 98, name: "FoxyReine", category: "rares", element: "Water", image: "Vcards/rares/FoxyReine-02.jpeg" },
+        { id: 99, name: "FroggyLoch", category: "rares", element: "Water", image: "Vcards/rares/FroggyLoch-02.jpeg" },
+        { id: 100, name: "Fream", category: "rares", element: "Electric", image: "Vcards/rares/Fream-02.jpeg" },
+        { id: 101, name: "Heavenly Father", category: "rares", element: "Electric", image: "Vcards/rares/Heavenly-Father-02.jpeg" },
+        { id: 102, name: "Juniper Actias", category: "rares", element: "Electric", image: "Vcards/rares/Juniper-Actias-02.jpeg" },
+        { id: 103, name: "Laimu", category: "rares", element: "Grass", image: "Vcards/rares/Laimu-02.jpeg" },
+        { id: 104, name: "Layna Lazar", category: "rares", element: "Electric", image: "Vcards/rares/Layna-Lazar-02.jpeg" },
+        { id: 105, name: "Lord Aethelstan", category: "rares", element: "Fire", image: "Vcards/rares/Lord-Aethel-02.jpeg" },
+        { id: 106, name: "Lucy Pyre", category: "rares", element: "Electric", image: "Vcards/rares/Lucy-Pyre-02.jpeg" },
+        { id: 107, name: "Meat",category: "rares", element: "Grass", image: "Vcards/rares/Meat-02.jpeg"},
+        { id: 108, name: "MegalodonVT",category: "rares", element: "Water", image: "Vcards/rares/MegalodonVT-02.jpeg"},
+        { id: 109, name: "Nanoless",category: "rares", element: "Platinum", image: "Vcards/rares/Nanoless-02.jpeg"},
+        { id: 110, name: "Nyanners", category: "rares", element: "Water", image: "Vcards/rares/Nayanners-02.png" },
+        { id: 111, name: "University Numi", category: "rares", element: "Fire", image: "Vcards/rares/Numi-02.jpeg" },
+        { id: 112, name: "Punkalopi", category: "rares", element: "Fire", image: "Vcards/rares/Punkalopi-02.jpeg" },
+        { id: 113, name: "Quinn Benet", category: "rares", element: "Electric", image: "Vcards/rares/Quinn-Benet-02.jpeg" },
+        { id: 114, name: "Rainhoe", category: "rares", element: "Electric", image: "Vcards/rares/Rainhoe-02.jpeg" },
+        { id: 115, name: "Sansin", category: "rares", element: "Electric", image: "Vcards/rares/Sansin-02.jpeg" },      
+        { id: 116, name: "Shoto", category: "rares", element: "Electric", image: "Vcards/rares/Shoto-02.jpeg" },
+        { id: 117, name: "Shylily", category: "rares", element: "Water", image: "Vcards/rares/Shylily-02.jpeg" },
+        { id: 118, name: "Silvervale", category: "rares", element: "Grass", image: "Vcards/rares/Silvervale-02.jpeg" },
+        { id: 119, name: "Sinder", category: "rares", element: "Fire", image: "Vcards/rares/Sinder-02.jpeg" },
+        { id: 120, name: "Sky", category: "rares", element: "Electric", image: "Vcards/rares/Sky-02.jpeg" },
+        { id: 121, name: "Tob", category: "rares", element: "Grass", image: "Vcards/rares/Tob-02.jpeg" },
+        { id: 122, name: "Totless", category: "rares", element: "Electric", image: "Vcards/rares/Totless-02.jpeg" },
+        { id: 123, name: "Pirate Trickywi", category: "rares", element: "Fire", image: "Vcards/rares/Trickywi-02.jpeg" },
+        { id: 124, name: "Vei", category: "rares", element: "Electric", image: "Vcards/rares/Vei-02.jpeg" },
+        { id: 125, name: "Farmer Vienna", category: "rares", element: "Grass", image: "Vcards/rares/Vienna-02.jpeg" },
+        { id: 126, name: "Akumi", category: "rares", element: "Fire", image: "Vcards/rares/Yoclesh-02.jpeg" },
+        { id: 127, name: "Yuzu", category: "rares", element: "Fire", image: "Vcards/rares/Yuzu-02.jpeg" },
+        //Ultra Rares
+        { id: 128, name: "Monarch", category: "ultra-rares", element: "Water", image: "Vcards/ultra rares/AmeLee-03.jpeg" },
+        { id: 129, name: "Bao the Whale", category: "ultra-rares", element: "Water", image: "Vcards/ultra rares/Bao-03.jpeg" },
+        { id: 130, name: "Buffpup", category: "ultra-rares", element: "Grass", image: "Vcards/ultra rares/Buffpup-03.jpeg" },
+        { id: 131, name: "Camila", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/Camila-03.jpeg" },
+        { id: 132, name: "CodeMiko", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/CodeMiko-03.jpeg" },
+        { id: 133, name: "Coqui", category: "ultra-rares", element: "Grass", image: "Vcards/ultra rares/Coqui-03.png" },
+        { id: 134, name: "Cottontailva", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/Cottontail-03.jpeg" },
+        { id: 135, name: "CyYu", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/CyYu-03.jpeg" },
+        { id: 136, name: "Doki", category: "ultra-rares", element: "Grass", image: "Vcards/ultra rares/Doki-03.jpeg" },
+        { id: 137, name: "Dya Rikku", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/Dya-Rikku-03.jpeg" },
+        { id: 138, name: "Ebiko", category: "ultra-rares", element: "Water", image: "Vcards/ultra rares/Ebiko-03.jpeg" },
+        { id: 139, name: "Fefe", category: "ultra-rares", element: "Fire", image: "Vcards/ultra rares/Fefe-03.jpeg" },
+        { id: 140, name: "FoxyReine", category: "ultra-rares", element: "Water", image: "Vcards/ultra rares/FoxyReine-03.jpeg" },
+        { id: 141, name: "FroggyLoch", category: "ultra-rares", element: "Water", image: "Vcards/ultra rares/FroggyLoch-03.jpeg" },
+        { id: 142, name: "Fream", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/Fream-03.jpeg" },
+        { id: 143, name: "Heavenly Father", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/Heavenly-Father-03.jpeg" },
+        { id: 144, name: "Juniper Actias", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/Juniper-Actias-03.jpeg" },
+        { id: 145, name: "Laimu", category: "ultra-rares", element: "Grass", image: "Vcards/ultra rares/Laimu-03.jpeg" },
+        { id: 146, name: "Layna Lazar", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/Layna-Lazar-03.jpeg" },
+        { id: 147, name: "Lord Aethelstan", category: "ultra-rares", element: "Fire", image: "Vcards/ultra rares/Lord-Aethel-03.jpeg" },
+        { id: 148, name: "Lucy Pyre", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/Lucy-Pyre-03.jpeg" },
+        { id: 149, name: "Meat",category: "ultra-rares", element: "Grass", image: "Vcards/ultra rares/Meat-03.jpeg"},
+        { id: 150, name: "MegalodonVT",category: "ultra-rares", element: "Water", image: "Vcards/ultra rares/MegalodonVT-03.jpeg"},
+        { id: 151, name: "Nanoless",category: "ultra-rares", element: "Platinum", image: "Vcards/ultra rares/Nanoless-03.jpeg"},
+        { id: 152, name: "Nyanners", category: "ultra-rares", element: "Water", image: "Vcards/ultra rares/Nayanners-03.png" },
+        { id: 153, name: "University Numi", category: "ultra-rares", element: "Fire", image: "Vcards/ultra rares/Numi-03.jpeg" },
+        { id: 154, name: "Punkalopi", category: "ultra-rares", element: "Fire", image: "Vcards/ultra rares/Punkalopi-03.jpeg" },
+        { id: 155, name: "Quinn Benet", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/Quinn-Benet-03.jpeg" },
+        { id: 156, name: "Rainhoe", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/Rainhoe-03.jpeg" },
+        { id: 157, name: "Sansin", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/Sansin-03.jpeg" },      
+        { id: 158, name: "Shoto", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/Shoto-03.jpeg" },
+        { id: 159, name: "Shylily", category: "ultra-rares", element: "Water", image: "Vcards/ultra rares/Shylily-03.jpeg" },
+        { id: 160, name: "Silvervale", category: "ultra-rares", element: "Grass", image: "Vcards/ultra rares/Silvervale-03.jpeg" },
+        { id: 161, name: "Sinder", category: "ultra-rares", element: "Fire", image: "Vcards/ultra rares/Sinder-03.jpeg" },
+        { id: 162, name: "Sky", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/Sky-03.jpeg" },
+        { id: 163, name: "Tob", category: "ultra-rares", element: "Grass", image: "Vcards/ultra rares/Tob-03.jpeg" },
+        { id: 164, name: "Totless", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/Totless-03.jpeg" },
+        { id: 165, name: "Pirate Trickywi", category: "ultra-rares", element: "Fire", image: "Vcards/ultra rares/Trickywi-03.jpeg" },
+        { id: 166, name: "Vei", category: "ultra-rares", element: "Electric", image: "Vcards/ultra rares/Vei-03.jpeg" },
+        { id: 167, name: "Farmer Vienna", category: "ultra-rares", element: "Grass", image: "Vcards/ultra rares/Vienna-03.jpeg" },
+        { id: 168, name: "Akumi", category: "ultra-rares", element: "Fire", image: "Vcards/ultra rares/Yoclesh-03.jpeg" },
+        { id: 169, name: "Yuzu", category: "ultra-rares", element: "Fire", image: "Vcards/ultra rares/Yuzu-03.jpeg" },
+        //support
+        
+        { id: 170, name: "Battle Cry", category: "supports", image: "Vcards/supports/Battle Cry.jpeg" },
+        { id: 171, name: "Butcher's Blade", category: "supports", image: "Vcards/supports/Butcher's Blade.jpeg" },
+        { id: 172, name: "Cyanide-chan", category: "supports", image: "Vcards/supports/Cyanide-chan.jpeg" },
+        { id: 173, name: "Doppelganger", category: "supports", image: "Vcards/supports/Doppelganger.jpeg" },
+        { id: 174, name: "Double Down", category: "supports", image: "Vcards/supports/Double Down.jpeg" },
+        { id: 175, name: "Electric Guardian", category: "supports", image: "Vcards/supports/Electric Guardian.jpeg" },
+        { id: 176, name: "Electric Shield", category: "supports", image: "Vcards/supports/Electric Shield.jpeg" },
+        { id: 177, name: "Exposed", category: "supports", image: "Vcards/supports/Exposed.jpeg" },
+        { id: 178, name: "Fire Guardian", category: "supports", image: "Vcards/supports/Fire Guardian.jpeg" },
+        { id: 179, name: "Fire Shield", category: "supports", image: "Vcards/supports/Fire Shield.jpeg" },
+
+        { id: 180, name: "Grass Guardian", category: "supports", image: "Vcards/supports/Grass Guardian.jpeg" },
+        { id: 181, name: "Grass Shield", category: "supports", image: "Vcards/supports/Grass Shield.jpeg" },
+        { id: 182, name: "Happiness-chan", category: "supports", image: "Vcards/supports/Happiness-chan.jpeg" },
+        { id: 183, name: "Harpoon", category: "supports", image: "Vcards/supports/Harpoon.jpeg" },
+        { id: 184, name: "Platinum Guardian", category: "supports", image: "Vcards/supports/Platinum Guardian.jpeg" },
+        { id: 185, name: "Platinum Shield", category: "supports", image: "Vcards/supports/Platinum Shield.jpeg" },
+        { id: 186, name: "Reaper", category: "supports", image: "Vcards/supports/Reaper.jpeg" },
+        { id: 187, name: "Snack Cat", category: "supports", image: "Vcards/supports/Snack Cat.jpeg" },
+        { id: 188, name: "Water Guardian", category: "supports", image: "Vcards/supports/Water Guardian.jpeg" },
+        { id: 189, name: "Water Shield", category: "supports", image: "Vcards/supports/Water Shield.jpeg" },
+        { id: 190, name: "White Knight", category: "supports", image: "Vcards/supports/White Knight.jpeg" },
+        { id: 191, name: "Work-Life Balance", category: "supports", image: "Vcards/supports/Work-Life Balance.jpeg" },
+    ];
+
+    const deck = {};
+    const maxCardCount = 4;
+    let searchText = "";
+    let currentCategory = "all";
+    let currentElement = "all";
+
+    function renderCards() {
+      const container = document.getElementById("tab-content");
+      container.innerHTML = cards
+        .filter(card => 
+          (currentCategory === "all" || card.category === currentCategory) &&
+          (currentElement === "all" || card.element === currentElement) &&
+          card.name.toLowerCase().includes(searchText.toLowerCase())
+        )
+        .map(card => `
+          <div class="card" onclick="addToDeck(${card.id})">
+            <img src="${card.image}" alt="${card.name}">
+          </div>
+        `)
+        .join("");
+    }
+
+    function showTab(category, event) {
+      currentCategory = category;
+      renderCards();
+
+      document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
+      if (event) event.target.classList.add("active");
+    }
+
+    function filterByElement(element, event) {
+      currentElement = element;
+      renderCards();
+
+      document.querySelectorAll(".filter-button").forEach(button => button.classList.remove("active"));
+      if (event) event.target.classList.add("active");
+    }
+
+    function addToDeck(id) {
+      const card = cards.find(c => c.id === id);
+      if (!card) return;
+
+      if (deck[id] && deck[id].count >= maxCardCount) {
+        alert(`You can only add up to ${maxCardCount} of the same card.`);
+        return;
+      }
+      if (!deck[id]) {
+        deck[id] = { count: 1, name: card.name, category: card.category };
+      } else {
+        deck[id].count++;
+      }
+      renderDeck();
+    }
+
+    function removeFromDeck(id) {
+      if (deck[id]) {
+        deck[id].count--;
+        if (deck[id].count === 0) {
+          delete deck[id];
+        }
+        renderDeck();
+      }
+    }
+
+
+    function clearDeck() {
+      const confirmClear = confirm("Are you sure you want to clear the deck?");
+      if (confirmClear) {
+        for (const card in deck) {
+          delete deck[card];
+        }
+        renderDeck();
+      }
+    }
+
+    function downloadDeck() {
+      const categories = ["mascots", "uncommons", "rares", "ultra-rares", "supports"];
+      let deckContent = "Your Deck:\n\n";
+      let totalCards = 0;
+
+      categories.forEach(category => {
+        const cardsInCategory = Object.entries(deck)
+          .filter(([_, details]) => details.category === category)
+          .map(([_, details]) => {
+            totalCards += details.count;
+            return `${details.name} x${details.count}`;
+          })
+          .join("\n");
+
+        if (cardsInCategory) {
+          deckContent += `${capitalize(category)}:\n${cardsInCategory}\n\n`;
+        }
+      });
+
+      deckContent += `Total Cards: ${totalCards}\n`;
+
+      const blob = new Blob([deckContent], { type: "text/plain" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "deck.txt";
+      a.click();
+    }
+
+    function renderDeck() {
+      const deckContainer = document.getElementById("deck-container");
+      const categories = ["mascots", "uncommons", "rares", "ultra-rares", "supports"];
+      let totalCards = 0;
+      deckContainer.innerHTML = categories
+        .map(category => {
+          const cardsInCategory = Object.entries(deck)
+            .filter(([_, details]) => details.category === category)
+            .map(([id, details]) => {
+              totalCards += details.count;
+              return `
+                <li>
+                  ${details.name} x${details.count}
+                  <button class="remove-button" onclick="removeFromDeck(${id})">Remove</button>
+                </li>
+              `;
+            })
+            .join("");
+
+          return cardsInCategory
+            ? `<div><h3 class="category-header">${capitalize(category)}</h3><ul class="deck-list">${cardsInCategory}</ul></div>`
+            : "";
+        })
+        .join("");
+
+      document.getElementById("deck-count").textContent = totalCards;
+    }
+
+    function filterByName(name) {
+      searchText = name;
+      renderCards();
+    }
+
+    function capitalize(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1).replace("-", " ");
+    }
+
+    renderCards();
+  </script>
 </body>
 </html>
